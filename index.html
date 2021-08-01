@@ -10,6 +10,11 @@
       href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
     />
 
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto Mono"
+      rel="stylesheet"
+    />
+
     <!-- CSS Reset -->
     <link
       rel="stylesheet"
@@ -25,7 +30,58 @@
     <title>Youtube IFrame Size</title>
   </head>
   <body>
-    <h3>Enter youtube embeded link here</h3>
-    <input type="text">
+    <div style="padding: 2rem">
+      <h5>Enter iframe embeded link here</h5>
+      <textarea
+        name="ytb-embed-input"
+        id="ytb-embed-input"
+        onkeyup="onInputChange()"
+        cols="30"
+        rows="20"
+        style="font-family: 'Roboto Mono'; height: 96px;"
+      ></textarea>
+
+      <h5>Ouput here</h5>
+      <textarea
+        name="ytb-embed-input"
+        id="ytb-embed-output"
+        onkeyup="onOutputChange()"
+        cols="30"
+        rows="20"
+        style="font-family: 'Roboto Mono';  height: 96px;"
+      ></textarea>
+
+      <div id="result"></div>
+    </div>
+    <script>
+      const onInputChange = () => {
+        const inputEl = document.getElementById('ytb-embed-input');
+
+        const outputEl = document.getElementById('ytb-embed-output');
+
+        outputEl.value = styleIFrame(inputEl.value);
+        
+        onOutputChange();
+      };
+
+      const styleIFrame = (html) => {
+        const domParser = new DOMParser()
+        const doc = domParser.parseFromString(html, 'text/html')
+        const body = doc.getElementsByTagName('body')[0];
+        const container = body.firstChild;
+        const iframe = container.getElementsByTagName('iframe')[0];
+
+        container.style = 'position: relative; overflow: hidden; width: 100%; padding-top: 56.25%;';
+        iframe.style = 'position: absolute; top: 0; left: 0; right: 0; width: 100%; height: 100%;';
+
+        return body.innerHTML;
+      }
+
+      const onOutputChange = () => {
+        const outputEl = document.getElementById('ytb-embed-output');
+        const resultEl = document.getElementById('result');
+        resultEl.innerHTML = outputEl.value;
+      }
+    </script>
   </body>
 </html>
